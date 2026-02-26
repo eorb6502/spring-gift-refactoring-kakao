@@ -59,3 +59,12 @@ claude.md에 있는 작업 문서화 규칙에 따르면 너가 방금 한 일�
 ```
 skills 중에 analyze-before-remove가 있는데 지금 너무 삭제에 취중되어있는거 같애. 삭제가 명칭을 리팩토링으로 바꿔줬으면 좋겠어.
 ```
+```
+/analyze-before-refactoring CategoryService 추출
+```
+```
+/analyze-before-refactoring productservice 추출
+```
+```
+@README.md, @docs/refactoring-analysis-product-service-extraction.md , @docs/refactoring-analysis-category-service-extraction.md 이 3개의 md 파일을 보고, readme.md 파일의 3-2, 3-3 부분을 같이 진행해줄 수 있을까 ? 이렇게 부탁하는 이유는 2개의 도메인이 꽤 많이 엮여있는 것 같아서 그래. 3개의 파일을 참고해서 진행해줘. 추가로 @docs/plan/TODO.md , @docs/plan/REQUIREMENT.md 를 참고해도 좋아
+```
