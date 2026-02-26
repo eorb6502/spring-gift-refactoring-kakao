@@ -2,6 +2,7 @@ package gift.product;
 
 import gift.category.Category;
 import gift.category.CategoryRepository;
+import gift.common.NameValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,7 +45,7 @@ public class AdminProductController {
         @RequestParam Long categoryId,
         Model model
     ) {
-        List<String> errors = ProductNameValidator.validate(name, true);
+        List<String> errors = NameValidator.validate(name, "Product name", 15);
         if (!errors.isEmpty()) {
             populateNewForm(model, errors, name, price, imageUrl, categoryId);
             return "product/new";
@@ -77,7 +78,7 @@ public class AdminProductController {
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new NoSuchElementException("Product not found. id=" + id));
 
-        List<String> errors = ProductNameValidator.validate(name, true);
+        List<String> errors = NameValidator.validate(name, "Product name", 15);
         if (!errors.isEmpty()) {
             populateEditForm(model, product, errors, name, price, imageUrl, categoryId);
             return "product/edit";

@@ -1,5 +1,6 @@
 package gift.option;
 
+import gift.common.NameValidator;
 import gift.product.Product;
 import gift.product.ProductRepository;
 import jakarta.validation.Valid;
@@ -85,7 +86,7 @@ public class OptionController {
     }
 
     private void validateName(String name) {
-        List<String> errors = OptionNameValidator.validate(name);
+        List<String> errors = NameValidator.validate(name, "Option name", 50);
         if (!errors.isEmpty()) {
             throw new IllegalArgumentException(String.join(", ", errors));
         }

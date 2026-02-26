@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import gift.common.NameValidator;
+
 import java.net.URI;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -80,7 +82,7 @@ public class ProductController {
     }
 
     private void validateName(String name) {
-        List<String> errors = ProductNameValidator.validate(name);
+        List<String> errors = NameValidator.validate(name, "Product name", 15, true);
         if (!errors.isEmpty()) {
             throw new IllegalArgumentException(String.join(", ", errors));
         }
