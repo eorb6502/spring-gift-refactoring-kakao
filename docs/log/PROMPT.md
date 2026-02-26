@@ -41,3 +41,6 @@ Implement the following plan: # 2-1. 미사용 @Autowired 제거 실행 계획
 ```
 claude.md에 있는 작업 문서화 규칙에 따르면 너가 방금 한 일을 문서화 했어야 했는데 왜 안했어 ?
 ```
+```
+@README.md 와 @docs/plan/TODO.md , @docs/plan/REQUIREMENT.md 이 3개의 파일을 보고 2-2의 validator 중복코드 정리 문제를 우리가 선정한 방식으로 리팩터링을 진행해줄 수 있을까 ?? 다 진행하면 잊지말고 문서화 부탁해 ~
+```

@@ -69,23 +69,11 @@
 - 동일한 정규식: `^[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ ()\\[\\]+\\-&/_]*$`
 - 차이점: MAX_LENGTH (Product=15, Option=50), Product만 "카카오" 포함 여부 검증
 
-**대안 A: 하나의 NameValidator로 통합 (파라미터로 분기)**
+**하나의 NameValidator로 통합 (파라미터로 분기)**
 - `NameValidator.validate(String name, int maxLength, boolean checkKakao)` 같은 메서드로 통합.
 - 기존 `ProductNameValidator`, `OptionNameValidator`는 삭제.
 - 장점: 중복 완전 제거. 정규식 수정 시 한 곳만 변경.
 - 단점: 파라미터가 많아질 수 있다. Product/Option 고유 검증이 추가될 때 분기가 복잡해질 수 있다.
-
-**대안 B: 공통 부분만 상위 클래스(또는 유틸)로 추출**
-- 공통 검증 로직(빈값, 특수문자)을 `NameValidationUtils`에 두고, 각 Validator에서 호출.
-- `ProductNameValidator`와 `OptionNameValidator`는 유지하되, 내부에서 공통 유틸을 사용.
-- 장점: 각 Validator의 독립성 유지. 고유 검증 로직 추가가 쉽다.
-- 단점: 클래스 수가 줄지 않는다. 간접 호출 한 단계 추가.
-
-**대안 C: Bean Validation 커스텀 어노테이션으로 전환**
-- `@ValidName(maxLength = 15, allowKakao = false)` 같은 커스텀 어노테이션을 만들어 Request DTO 필드에 적용.
-- Controller에서 수동 검증 호출 코드를 제거.
-- 장점: 선언적 검증. Controller가 더 얇아진다. `@Valid`와 자연스럽게 통합.
-- 단점: 구현 복잡도가 높다. ConstraintValidator 작성 필요. 이 단계에서는 과도할 수 있다.
 
 ---
 
