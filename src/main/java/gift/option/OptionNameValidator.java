@@ -22,16 +22,16 @@ public class OptionNameValidator {
         List<String> errors = new ArrayList<>();
 
         if (name == null || name.isBlank()) {
-            errors.add("옵션 이름은 필수입니다.");
+            errors.add("Option name is required.");
             return errors;
         }
 
         if (name.length() > MAX_LENGTH) {
-            errors.add("옵션 이름은 공백을 포함하여 최대 50자까지 입력할 수 있습니다.");
+            errors.add("Option name must be at most 50 characters.");
         }
 
         if (!ALLOWED_PATTERN.matcher(name).matches()) {
-            errors.add("옵션 이름에 허용되지 않는 특수 문자가 포함되어 있습니다. 사용 가능: ( ), [ ], +, -, &, /, _");
+            errors.add("Option name contains invalid special characters. Allowed: ( ) [ ] + - & / _");
         }
 
         return errors;

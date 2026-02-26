@@ -56,10 +56,10 @@ public class Member {
     // point deduction for order payment
     public void deductPoint(int amount) {
         if (amount <= 0) {
-            throw new IllegalArgumentException("차감 금액은 1 이상이어야 합니다.");
+            throw new IllegalArgumentException("Deduction amount must be greater than zero.");
         }
         if (amount > this.point) {
-            throw new IllegalArgumentException("포인트가 부족합니다.");
+            throw new IllegalArgumentException("Insufficient points.");
         }
         this.point -= amount;
     }
