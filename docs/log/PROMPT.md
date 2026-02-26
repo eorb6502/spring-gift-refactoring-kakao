@@ -32,3 +32,9 @@ Implement the following plan: # 1단계: 스타일 정리 구현 계획 (에러 
 ```
 md 문서들이 지금 너무 root에 많아서 docs 폴더 안에 정리해줄 수 있을까? 폴더 만들어도 상관없어. 스킬로도 해당 내용 만들어놔 ~ 나중에 쓰게!
 ```
+```
+/analyze-before-remove Validator 중복 코드 정리
+```
+```
+Implement the following plan: # 2-1. 미사용 @Autowired 제거 실행 계획
+```

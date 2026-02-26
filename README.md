@@ -56,20 +56,10 @@
 
 **현재 문제:** `MemberController`, `AdminMemberController` 등에서 생성자 주입을 사용하면서도 `@Autowired` 어노테이션이 남아있다. Spring 4.3+ 부터 생성자가 하나뿐이면 `@Autowired`는 불필요하다.
 
-**대안 A: @Autowired만 제거**
-- 생성자 위의 `@Autowired`를 삭제한다. 다른 변경 없음.
-- 장점: 최소 변경. Spring 공식 권장 방식.
-- 단점: 없음.
-
-**대안 B: @Autowired 제거 + @RequiredArgsConstructor(Lombok) 도입**
-- `@Autowired`와 생성자를 모두 제거하고, Lombok의 `@RequiredArgsConstructor`로 대체.
-- 장점: 보일러플레이트 대폭 감소. 필드 추가 시 생성자 수정 불필요.
-- 단점: Lombok 의존성 추가 필요. 빌드 도구에 Lombok 설정 필요. 현 단계에서 새 의존성 추가는 과도할 수 있다.
-
-**대안 C: @Autowired 제거 + 필드를 final로 변경**
-- `@Autowired` 삭제와 함께, 주입받는 필드에 `final` 키워드를 추가하여 불변성을 보장한다.
-- 장점: 실수로 필드를 재할당하는 것을 방지. Spring 권장 패턴.
-- 단점: 이미 final인 경우 변경 없음. 현재 코드 확인 필요.
+**@Autowired 어노테이션만 제거 (필드는 이미 final)**
+- 4개 파일(`JwtProvider`, `AuthenticationResolver`, `MemberController`, `AdminMemberController`)에서 `@Autowired` 어노테이션과 import를 제거한다.
+- 모든 파일이 이미 `final` 필드를 사용하고 있으므로 어노테이션 제거만으로 충분하다.
+- Spring 4.3+ 에서 생성자가 1개뿐이면 `@Autowired`는 불필요하다.
 
 ---
 
