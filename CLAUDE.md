@@ -4,10 +4,13 @@
 
 ```
 docs/
+├── analysis/    # 분석 보고서 (리팩토링/삭제 전 분석)
+├── reports/     # 작업 보고서 (완료된 작업 결과)
 ├── plan/        # 계획 및 요구사항 (REQUIREMENT.md, TODO.md)
-├── log/         # 프롬프트 기록 (PROMPT.md)
-└── reports/     # 작업 보고서
+└── log/         # 프롬프트 기록 (PROMPT.md)
 ```
+
+- 파일명 규칙: 도메인 기반 이름 사용 (예: `category-service.md`, `kotlin-dependencies.md`)
 
 ## 프롬프트 기록 규칙
 

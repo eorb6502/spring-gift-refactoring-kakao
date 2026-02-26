@@ -68,3 +68,41 @@ skills 중에 analyze-before-remove가 있는데 지금 너무 삭제에 취중�
 ```
 @README.md, @docs/refactoring-analysis-product-service-extraction.md , @docs/refactoring-analysis-category-service-extraction.md 이 3개의 md 파일을 보고, readme.md 파일의 3-2, 3-3 부분을 같이 진행해줄 수 있을까 ? 이렇게 부탁하는 이유는 2개의 도메인이 꽤 많이 엮여있는 것 같아서 그래. 3개의 파일을 참고해서 진행해줘. 추가로 @docs/plan/TODO.md , @docs/plan/REQUIREMENT.md 를 참고해도 좋아
 ```
+```
+/analyze-before-refactoring OptionService
+```
+```
+/analyze-before-refactoring OrderService 추출
+```
+```
+/analyze-before-refactoring WishService 추출
+```
+```
+@README.md 와 @docs/refactoring-analysis-wish-service-extraction.md 파일을 보고 WISH_SERVICE 먼저 리팩토링해줄 수 있을까 ?
+```
+```
+Implement the following plan:
+
+# OptionService (3-4) + OrderService (3-6) 추출 계획
+
+## Context
+
+README.md 3-4(OptionService)와 3-6(OrderService + KakaoNotificationService)를 함께 진행한다.
+OrderService가 재고 차감을 위해 OptionService에 의존하므로, OptionService를 먼저 만들고 OrderService가 이를 사용하는 구조로 설계한다.
+
+의존 체인:
+OptionController → OptionService → OptionRepository, ProductService
+OrderController  → OrderService  → OptionService, MemberRepository, OrderRepository, KakaoNotificationService → KakaoMessageClient
+```
+```
+/analyze-before-refactoring KakaoAuthService 추출
+```
+```
+지금 보고서들이 docs 폴더 안에도 너무 복잡하게 존재하는데, 분석 보고서와 작업 보고서를 나눠서 정리해줄 수 있을까 ?? 보고서들이 너무 많아서 복잡해. 추가적으로 이름도 마음에 안들어서, 통일된 규칙을 가지도록 이름도 바꿔줘
+```
+```
+@README.md @docs/analysis/kakao-auth-service.md 이 2개의 파일을 보고 readme의 3-7 부분을 리팩토링 해줄 수 있을까 ? 보고서 작성도 부탁할게.
+```
+```
+ok 이제 리팩토링이 다 끝났는데, 기존의 테스트들이 전부 통과해야될거 아냐 ?? 그러면 테스트를 한번 실행시켜볼래 ? 너가 일을 잘 했는지 검증할 수 있는 순간이야.
+```
