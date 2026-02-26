@@ -53,3 +53,9 @@ claude.md에 있는 작업 문서화 규칙에 따르면 너가 방금 한 일�
 ```
 @docs/removal-analysis-unused-kotlin-dependencies.md 랑 @README.md 보고 2-3에 우리가 어떤 방식으로 리팩토링할지 선정했어. 이걸 기반으로 코드를 리팩토링해줄 수 있을까 ?
 ```
+```
+@README.md 랑 @docs/removal-analysis-member-controller.md 파일 보고 3-1에서 우리가 선정한 방식으로 membercontroller 리팩토링 진행해줘
+```
+```
+skills 중에 analyze-before-remove가 있는데 지금 너무 삭제에 취중되어있는거 같애. 삭제가 명칭을 리팩토링으로 바꿔줬으면 좋겠어.
+```

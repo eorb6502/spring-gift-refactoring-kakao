@@ -91,7 +91,7 @@
 
 ### 3. 서비스 계층 추출
 
-#### 3-1. MemberService 추출
+#### 3-1.
 
 **현재 문제:** `MemberController`에 회원가입(중복 확인 → 저장 → JWT 발급), 로그인(조회 → 비밀번호 검증 → JWT 발급) 비즈니스 로직이 직접 구현되어 있다. `AdminMemberController`에도 회원 생성, 포인트 충전 로직이 있다.
 
