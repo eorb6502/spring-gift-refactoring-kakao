@@ -5,7 +5,6 @@ import gift.product.ProductRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.NoSuchElementException;
 
 /*
  * Each product must have at least one option at all times.
@@ -34,13 +33,11 @@ public class OptionController {
 
     @GetMapping
     public ResponseEntity<List<OptionResponse>> getOptions(@PathVariable Long productId) {
-        Product product = productRepository.findById(productId).orElse(null);
-        if (product == null) {
-            return ResponseEntity.notFound().build();
-        }
+        productRepository.findById(productId)
+            .orElseThrow(() -> new NoSuchElementException("Product not found. id=" + productId));
         List<OptionResponse> options = optionRepository.findByProductId(productId).stream()
             .map(OptionResponse::from)
-            .collect(Collectors.toList());
+            .toList();
         return ResponseEntity.ok(options);
     }
 
@@ -51,13 +48,11 @@ public class OptionController {
     ) {
         validateName(request.name());
 
-        Product product = productRepository.findById(productId).orElse(null);
-        if (product == null) {
-            return ResponseEntity.notFound().build();
-        }
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new NoSuchElementException("Product not found. id=" + productId));
 
         if (optionRepository.existsByProductIdAndName(productId, request.name())) {
-            throw new IllegalArgumentException("이미 존재하는 옵션명입니다.");
+            throw new IllegalArgumentException("Option name already exists.");
         }
 
         Option saved = optionRepository.save(new Option(product, request.name(), request.quantity()));
@@ -71,19 +66,18 @@ public class OptionController {
         @PathVariable Long productId,
         @PathVariable Long optionId
     ) {
-        Product product = productRepository.findById(productId).orElse(null);
-        if (product == null) {
-            return ResponseEntity.notFound().build();
-        }
+        productRepository.findById(productId)
+            .orElseThrow(() -> new NoSuchElementException("Product not found. id=" + productId));
 
         List<Option> options = optionRepository.findByProductId(productId);
         if (options.size() <= 1) {
-            throw new IllegalArgumentException("옵션이 1개인 상품은 옵션을 삭제할 수 없습니다.");
+            throw new IllegalArgumentException("Cannot delete the last option of a product.");
         }
 
-        Option option = optionRepository.findById(optionId).orElse(null);
-        if (option == null || !option.getProduct().getId().equals(productId)) {
-            return ResponseEntity.notFound().build();
+        Option option = optionRepository.findById(optionId)
+            .orElseThrow(() -> new NoSuchElementException("Option not found. id=" + optionId));
+        if (!option.getProduct().getId().equals(productId)) {
+            throw new NoSuchElementException("Option not found. id=" + optionId);
         }
 
         optionRepository.delete(option);
@@ -95,10 +89,5 @@ public class OptionController {
         if (!errors.isEmpty()) {
             throw new IllegalArgumentException(String.join(", ", errors));
         }
-    }
-
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
     }
 }

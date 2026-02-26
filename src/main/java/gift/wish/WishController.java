@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/wishes")
@@ -60,15 +61,13 @@ public class WishController {
         }
 
         // check product
-        var product = productRepository.findById(request.productId()).orElse(null);
-        if (product == null) {
-            return ResponseEntity.notFound().build();
-        }
+        var product = productRepository.findById(request.productId())
+            .orElseThrow(() -> new NoSuchElementException("Product not found. id=" + request.productId()));
 
         // check duplicate
-        var existing = wishRepository.findByMemberIdAndProductId(member.getId(), product.getId()).orElse(null);
-        if (existing != null) {
-            return ResponseEntity.ok(WishResponse.from(existing));
+        var existing = wishRepository.findByMemberIdAndProductId(member.getId(), product.getId());
+        if (existing.isPresent()) {
+            return ResponseEntity.ok(WishResponse.from(existing.get()));
         }
 
         var saved = wishRepository.save(new Wish(member.getId(), product));
@@ -87,10 +86,8 @@ public class WishController {
             return ResponseEntity.status(401).build();
         }
 
-        var wish = wishRepository.findById(id).orElse(null);
-        if (wish == null) {
-            return ResponseEntity.notFound().build();
-        }
+        var wish = wishRepository.findById(id)
+            .orElseThrow(() -> new NoSuchElementException("Wish not found. id=" + id));
 
         if (!wish.getMemberId().equals(member.getId())) {
             return ResponseEntity.status(403).build();

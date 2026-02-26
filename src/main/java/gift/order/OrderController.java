@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -78,10 +79,8 @@ public class OrderController {
         }
 
         // validate option
-        var option = optionRepository.findById(request.optionId()).orElse(null);
-        if (option == null) {
-            return ResponseEntity.notFound().build();
-        }
+        var option = optionRepository.findById(request.optionId())
+            .orElseThrow(() -> new NoSuchElementException("Option not found. id=" + request.optionId()));
 
         // subtract stock
         option.subtractQuantity(request.quantity());

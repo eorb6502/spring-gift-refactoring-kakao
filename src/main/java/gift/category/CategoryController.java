@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/categories")
@@ -43,10 +44,8 @@ public class CategoryController {
         @PathVariable Long id,
         @Valid @RequestBody CategoryRequest request
     ) {
-        Category category = categoryRepository.findById(id).orElse(null);
-        if (category == null) {
-            return ResponseEntity.notFound().build();
-        }
+        Category category = categoryRepository.findById(id)
+            .orElseThrow(() -> new NoSuchElementException("Category not found. id=" + id));
 
         category.update(request.name(), request.color(), request.imageUrl(), request.description());
         categoryRepository.save(category);
