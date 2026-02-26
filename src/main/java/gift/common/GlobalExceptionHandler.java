@@ -1,5 +1,8 @@
 package gift.common;
 
+import gift.auth.ForbiddenException;
+import gift.auth.UnauthorizedException;
+
 import java.util.NoSuchElementException;
 
 import org.springframework.http.HttpStatus;
@@ -18,5 +21,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<ErrorResponse> handleNoSuchElement(NoSuchElementException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(e.getMessage()));
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<Void> handleUnauthorized(UnauthorizedException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<Void> handleForbidden(ForbiddenException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 }
