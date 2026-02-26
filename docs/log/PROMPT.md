@@ -44,3 +44,12 @@ claude.md에 있는 작업 문서화 규칙에 따르면 너가 방금 한 일�
 ```
 @README.md 와 @docs/plan/TODO.md , @docs/plan/REQUIREMENT.md 이 3개의 파일을 보고 2-2의 validator 중복코드 정리 문제를 우리가 선정한 방식으로 리팩터링을 진행해줄 수 있을까 ?? 다 진행하면 잊지말고 문서화 부탁해 ~
 ```
+```
+/analyze-before-remove 미사용 kotlin 의존성 정리해줘.
+```
+```
+/analyze-before-remove MemberController 구현 의도
+```
+```
+@docs/removal-analysis-unused-kotlin-dependencies.md 랑 @README.md 보고 2-3에 우리가 어떤 방식으로 리팩토링할지 선정했어. 이걸 기반으로 코드를 리팩토링해줄 수 있을까 ?
+```

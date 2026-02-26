@@ -81,21 +81,11 @@
 
 **현재 문제:** `build.gradle.kts`에 Kotlin 플러그인(`kotlin("jvm")`, `kotlin("plugin.spring")`)과 Kotlin 의존성이 포함되어 있으나, 실제 Kotlin 소스 파일이 없다. `ktlint` 플러그인도 설정되어 있다.
 
-**대안 A: Kotlin 관련 설정 전부 제거**
+**Kotlin 관련 설정 전부 제거**
 - `build.gradle.kts`에서 Kotlin 플러그인, 의존성, ktlint 설정을 모두 제거.
 - `src/main/kotlin`, `src/test/kotlin` 디렉토리도 제거.
 - 장점: 빌드 시간 단축. 불필요한 의존성 제거로 프로젝트가 깔끔해진다.
 - 단점: 향후 Kotlin 도입 시 다시 추가해야 한다.
-- 테오픽
-**대안 B: Kotlin 의존성은 유지, ktlint만 제거**
-- Kotlin 코드를 나중에 쓸 수 있으므로 플러그인은 유지. 사용하지 않는 ktlint만 제거.
-- 장점: 향후 Kotlin 전환 가능성을 열어둔다.
-- 단점: 사용하지 않는 의존성이 남는다. YAGNI 원칙 위반.
-
-**대안 C: 현재 상태 유지**
-- 프로젝트 초기 설정이므로 향후 Kotlin 도입 의도가 있을 수 있다. 확인 전까지 변경하지 않는다.
-- 장점: 리스크 없음. 의도를 파악한 후 결정 가능.
-- 단점: 불필요한 빌드 오버헤드가 유지된다.
 
 ---
 
@@ -105,22 +95,11 @@
 
 **현재 문제:** `MemberController`에 회원가입(중복 확인 → 저장 → JWT 발급), 로그인(조회 → 비밀번호 검증 → JWT 발급) 비즈니스 로직이 직접 구현되어 있다. `AdminMemberController`에도 회원 생성, 포인트 충전 로직이 있다.
 
-**대안 A: 단일 MemberService 생성**
-- `MemberService`를 만들어 `register()`, `login()`, `chargePoint()` 등의 메서드로 추출.
-- `MemberController`와 `AdminMemberController` 모두 `MemberService`를 사용.
-- 장점: 구조가 단순. Controller 간 로직 공유 가능 (예: 중복 이메일 확인).
-- 단점: Service가 비대해질 수 있다.
-
-**대안 B: MemberService + AuthService 분리**
+**MemberService + AuthService 분리**
 - 인증 관련(register, login, JWT 발급)은 `AuthService`로, 회원 관리(조회, 포인트)는 `MemberService`로 분리.
 - 장점: 단일 책임 원칙. 인증과 회원 관리의 관심사가 명확히 나뉜다.
 - 단점: 클래스가 2개 추가된다. 경계가 모호한 경우가 있을 수 있다.
-- 테오픽
-**대안 C: MemberService만 생성 (Admin 로직은 Controller에 유지)**
-- REST API 쪽(`MemberController`)의 로직만 Service로 추출.
-- `AdminMemberController`는 Thymeleaf 기반이고 단순하므로 현재 유지.
-- 장점: 변경 범위 최소화. Admin은 내부용이라 구조 개선 우선순위가 낮다.
-- 단점: 로직 중복이 남을 수 있다 (예: 중복 이메일 확인이 양쪽에 존재).
+
 
 ---
 
@@ -128,21 +107,11 @@
 
 **현재 문제:** `CategoryController`에 CRUD 로직이 직접 구현되어 있다. 비교적 단순하지만 Repository 직접 호출, 엔티티 변환 등이 Controller에 있다.
 
-**대안 A: CategoryService 생성 (전체 CRUD 추출)**
+**CategoryService 생성 (전체 CRUD 추출)**
 - `findAll()`, `create()`, `update()`, `delete()` 메서드를 가진 `CategoryService` 생성.
 - Controller는 요청 파싱과 응답 변환만 담당.
 - 장점: 일관된 계층 구조. 다른 도메인과 동일한 패턴.
 - 단점: 단순 위임만 하는 Service가 될 수 있다 (pass-through).
-- 테오픽
-**대안 B: Service 없이 Controller 유지**
-- 비즈니스 로직이 거의 없으므로 현재 구조를 유지한다.
-- 장점: 불필요한 계층 추가 방지. KISS 원칙.
-- 단점: 다른 도메인은 Service가 있고 Category만 없으면 일관성이 깨진다.
-
-**대안 C: CategoryService 생성하되 최소한으로**
-- 검증이 필요한 `create()`와 `update()`만 Service로 추출. 단순 조회/삭제는 Controller에 유지.
-- 장점: 필요한 부분만 추출. 과도한 추상화 방지.
-- 단점: 일부는 Service, 일부는 Controller에 남아 경계가 모호하다.
 
 ---
 
@@ -150,21 +119,10 @@
 
 **현재 문제:** `ProductController`에 상품명 검증(`validateName`), 카테고리 조회, 상품 CRUD 로직이 있다. `AdminProductController`에도 동일한 검증 + Thymeleaf 렌더링 로직이 있다.
 
-**대안 A: 단일 ProductService 생성**
-- 상품 CRUD + 이름 검증 + 카테고리 연결을 `ProductService`로 추출.
-- `ProductController`와 `AdminProductController` 모두 `ProductService`를 사용.
-- 장점: 검증 로직 공유. Controller가 얇아진다.
-- 단점: Admin의 `allowKakao=true` 분기를 Service에서 처리해야 한다.
-- 테오픽
-**대안 B: ProductService + 검증은 Validator에 위임**
-- `ProductService`는 CRUD만 담당. 검증은 기존 `ProductNameValidator`를 Service 내부에서 호출.
+**ProductService + 검증은 Validator에 위임**
+- `ProductService`는 CRUD만 담당. 검증은 기존 `NameValidator`를 Service 내부에서 호출.
 - 장점: 각 클래스의 책임이 명확. Validator 재사용 가능.
 - 단점: 대안 A와 큰 차이 없음. 호출 체인이 한 단계 깊어진다.
-
-**대안 C: ProductService 생성 (Admin 로직은 Controller에 유지)**
-- REST API 쪽 로직만 Service로 추출. Admin Controller는 현재 유지.
-- 장점: 변경 범위 최소화.
-- 단점: 검증 로직 중복 유지.
 
 ---
 
@@ -172,23 +130,12 @@
 
 **현재 문제:** `OptionController`에 옵션명 검증, 중복 확인, 최소 옵션 개수 검증, CRUD 로직이 모두 있다.
 
-**대안 A: OptionService 생성 (전체 비즈니스 로직 추출)**
+**OptionService 생성 (전체 비즈니스 로직 추출)**
 - `createOption()`: 이름 검증 + 중복 확인 + 저장.
 - `deleteOption()`: 최소 개수 검증 + 소속 확인 + 삭제.
 - Controller는 pathVariable 파싱과 응답 반환만 담당.
 - 장점: 비즈니스 규칙(중복 확인, 최소 개수)이 Service에 모인다.
 - 단점: 없음. 가장 자연스러운 구조.
-- 테오픽
-**대안 B: OptionService + 검증 로직은 Option 엔티티에 이동**
-- 최소 개수 검증을 `Product.removeOption()` 같은 도메인 메서드로 이동.
-- Service는 조율만 담당.
-- 장점: 도메인 모델이 풍부해진다 (Rich Domain Model).
-- 단점: 엔티티가 Repository 의존 없이 검증하려면 옵션 목록을 인자로 받아야 한다. 현 단계에서 도메인 모델 변경은 과도할 수 있다.
-
-**대안 C: OptionService 생성 + ProductService에 옵션 관련 메서드 포함**
-- 별도 OptionService 대신, `ProductService.addOption()`, `ProductService.removeOption()`으로 구현.
-- 장점: 옵션은 상품의 하위 개념이므로 상품 Service에서 관리하는 것이 자연스럽다.
-- 단점: ProductService가 비대해진다. Option 단독 조회/수정이 필요할 때 어색하다.
 
 ---
 
@@ -196,23 +143,11 @@
 
 **현재 문제:** `WishController`에 인증 확인, 상품 조회, 위시 중복 확인, 소유권 검증 로직이 모두 있다. 인증 코드(`extractMember` + null 체크)가 매 메서드마다 반복된다.
 
-**대안 A: WishService 생성 (인증은 Controller에 유지)**
-- 비즈니스 로직(중복 확인, 소유권 검증, CRUD)만 Service로 추출.
-- 인증(`extractMember`)은 Controller에서 처리 후 memberId를 Service에 전달.
-- 장점: Service가 인증에 의존하지 않아 테스트가 쉽다.
-- 단점: Controller에 인증 보일러플레이트가 남는다.
-
-**대안 B: WishService 생성 + HandlerMethodArgumentResolver로 인증 처리**
+**WishService 생성 + HandlerMethodArgumentResolver로 인증 처리**
 - `@LoginMember Member member` 같은 커스텀 어노테이션 + ArgumentResolver를 만들어 인증 보일러플레이트를 제거.
 - Service에는 순수 비즈니스 로직만 남긴다.
 - 장점: Controller가 가장 얇아진다. 인증 코드 중복 완전 제거.
 - 단점: ArgumentResolver 클래스 추가 필요. 구조 변경 범위가 넓다.
-- 테오픽
-**대안 C: WishService 생성 (인증 포함)**
-- `WishService`가 `AuthenticationResolver`를 직접 사용하여 인증도 내부에서 처리.
-- Controller는 `Authorization` 헤더만 전달.
-- 장점: Controller가 매우 단순해진다.
-- 단점: Service가 HTTP 헤더에 의존하게 되어 계층 분리가 약해진다.
 
 ---
 
@@ -220,23 +155,12 @@
 
 **현재 문제:** `OrderController.createOrder()`가 프로젝트에서 가장 복잡한 메서드다. 인증 확인 → 옵션 조회 → 재고 차감 → 포인트 차감 → 주문 저장 → 카카오 알림 발송까지 6단계를 하나의 Controller 메서드에서 처리한다.
 
-**대안 A: 단일 OrderService 생성 (전체 로직 추출)**
-- `createOrder(Long memberId, OrderRequest request)` 메서드 하나에 전체 흐름을 추출.
-- 카카오 알림 발송도 Service 내부에서 처리.
-- 장점: 구현이 단순. Controller가 깔끔해진다.
-- 단점: OrderService 하나가 옵션, 멤버, 카카오 클라이언트 등 여러 의존성을 갖는다.
-
-**대안 B: OrderService + 카카오 알림은 별도 분리**
+**OrderService + 카카오 알림은 별도 분리**
 - 주문 처리(조회, 차감, 저장)는 `OrderService`에, 카카오 알림은 `KakaoNotificationService`로 분리.
 - `OrderService`가 `KakaoNotificationService`를 호출.
 - 장점: 알림 로직 변경이 주문에 영향을 주지 않는다. 단일 책임 원칙.
 - 단점: 클래스가 2개 추가된다. 현재 `KakaoMessageClient`가 이미 분리되어 있으므로 중간 계층이 하나 더 늘어난다.
-- 테오픽
-**대안 C: OrderService 생성 + @Transactional로 원자성 보장**
-- 대안 A와 동일하되, 재고 차감 + 포인트 차감 + 주문 저장을 `@Transactional`로 묶는다.
-- 카카오 알림은 트랜잭션 밖에서 best-effort로 처리.
-- 장점: 현재 Controller에서는 트랜잭션 관리가 없어 재고는 차감됐는데 주문 저장이 실패하는 정합성 문제가 있다. 이를 해결한다.
-- 단점: 기능 요구 사항에서 "작동 변경 없음"을 요구하는데, 트랜잭션 추가는 작동 변경에 해당할 수 있다.
+
 
 ---
 
@@ -244,20 +168,8 @@
 
 **현재 문제:** `KakaoAuthController.callback()`에 Kakao OAuth 흐름(토큰 요청 → 사용자 정보 조회 → 회원 자동 등록/조회 → kakaoAccessToken 저장 → JWT 발급)이 직접 구현되어 있다.
 
-**대안 A: KakaoAuthService 생성**
+**KakaoAuthService 생성**
 - OAuth 콜백 처리 전체를 `KakaoAuthService.processCallback(String code)` 메서드로 추출.
 - 반환값은 JWT 토큰 문자열 또는 `TokenResponse`.
 - 장점: Controller가 위임만 담당. OAuth 흐름이 Service에 캡슐화된다.
 - 단점: 없음. 가장 자연스러운 구조.
-- 테오픽
-**대안 B: MemberService에 Kakao 로그인 통합**
-- 3-1에서 만드는 `MemberService`(또는 `AuthService`)에 `loginWithKakao(String code)` 메서드를 추가.
-- 일반 로그인과 카카오 로그인이 하나의 Service에서 관리된다.
-- 장점: 인증 관련 로직이 한 곳에 모인다. Service 클래스 수가 줄어든다.
-- 단점: MemberService(또는 AuthService)가 KakaoLoginClient에도 의존하게 되어 비대해진다.
-
-**대안 C: KakaoAuthService + login URL 생성도 포함**
-- `KakaoAuthController.login()`의 URL 조립 로직까지 Service로 추출.
-- `getLoginUrl()`과 `processCallback()` 두 메서드를 가진 Service.
-- 장점: Controller에 Kakao 관련 로직이 완전히 없어진다.
-- 단점: URL 조립은 단순 문자열 처리라 Service에 넣을 필요성이 낮을 수 있다.
