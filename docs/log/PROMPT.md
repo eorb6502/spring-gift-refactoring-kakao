@@ -38,3 +38,6 @@ md 문서들이 지금 너무 root에 많아서 docs 폴더 안에 정리해줄 
 ```
 Implement the following plan: # 2-1. 미사용 @Autowired 제거 실행 계획
 ```
+```
+claude.md에 있는 작업 문서화 규칙에 따르면 너가 방금 한 일을 문서화 했어야 했는데 왜 안했어 ?
+```
