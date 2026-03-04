@@ -59,6 +59,10 @@ public class Option {
         return product;
     }
 
+    public Long productId() {
+        return product.getId();
+    }
+
     public String getName() {
         return name;
     }

@@ -48,7 +48,7 @@ public class OptionService {
 
         Option option = optionRepository.findById(optionId)
             .orElseThrow(() -> new NoSuchElementException("Option not found. id=" + optionId));
-        if (!option.getProduct().getId().equals(productId)) {
+        if (!option.productId().equals(productId)) {
             throw new NoSuchElementException("Option not found. id=" + optionId);
         }
 
@@ -61,7 +61,7 @@ public class OptionService {
 
         Option option = optionRepository.findById(optionId)
             .orElseThrow(() -> new NoSuchElementException("Option not found. id=" + optionId));
-        if (!option.getProduct().getId().equals(productId)) {
+        if (!option.productId().equals(productId)) {
             throw new NoSuchElementException("Option not found. id=" + optionId);
         }
         if (optionRepository.existsByProductIdAndNameAndIdNot(productId, name, optionId)) {
