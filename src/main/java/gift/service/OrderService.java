@@ -36,7 +36,7 @@ public class OrderService {
         Option option = optionService.subtractQuantity(optionId, quantity);
 
         // deduct points
-        var price = option.getProduct().getPrice() * quantity;
+        var price = option.calculatePrice(quantity);
         memberService.deductPoint(member, price);
 
         // save order

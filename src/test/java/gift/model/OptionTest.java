@@ -9,12 +9,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class OptionTest {
 
+    private static Category 전자기기 = new Category("전자기기", "#1E90FF", "https://example.com/img.jpg", "설명");
     private Product product;
 
     @BeforeEach
     void setUp() {
-        var category = new Category("전자기기", "#1E90FF", "https://example.com/img.jpg", "설명");
-        product = new Product("테스트상품", 10000, "https://example.com/img.jpg", category);
+        product = new Product("테스트상품", 10000, "https://example.com/img.jpg", 전자기기);
     }
 
     @Test
