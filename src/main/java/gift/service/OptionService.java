@@ -73,7 +73,8 @@ public class OptionService {
     }
 
     public Option subtractQuantity(Long optionId, int quantity) {
-        Option option = findById(optionId);
+        Option option = optionRepository.findByIdForUpdate(optionId)
+            .orElseThrow(() -> new NoSuchElementException("Option not found. id=" + optionId));
         option.subtractQuantity(quantity);
         return optionRepository.save(option);
     }
