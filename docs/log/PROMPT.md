@@ -148,3 +148,12 @@ Implement the following plan:
 
 API 명세에 `PUT /api/products/{productId}/options/{optionId}` (상품 옵션 수정)이 정의되어 있지만, OptionController에 PUT 엔드포인트가 없고 OptionService에 update() 메서드도 없다. 누락된 작동을 구현한다.
 ```
+```
+Implement the following plan:
+
+# 5-2. 테스트 검증 강화 — 예외만 확인하는 테스트를 상태 검증으로 개선
+
+## Context
+
+예외 발생 테스트에서 예외 발생 여부만 확인하고, 예외 발생 후 상태가 변하지 않았는지 검증하지 않는 테스트들이 있다. 예외가 발생했더라도 내부 상태가 변해버렸다면 버그이므로, 상태 불변 검증을 추가한다.
+```
