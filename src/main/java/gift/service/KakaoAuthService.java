@@ -7,6 +7,7 @@ import gift.dto.TokenResponse;
 import gift.model.Member;
 import gift.repository.MemberRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriComponentsBuilder;
 
 /*
@@ -44,6 +45,7 @@ public class KakaoAuthService {
             .toUriString();
     }
 
+    @Transactional
     public TokenResponse processCallback(String code) {
         KakaoLoginClient.KakaoTokenResponse kakaoToken = kakaoLoginClient.requestAccessToken(code);
         KakaoLoginClient.KakaoUserResponse kakaoUser = kakaoLoginClient.requestUserInfo(kakaoToken.accessToken());

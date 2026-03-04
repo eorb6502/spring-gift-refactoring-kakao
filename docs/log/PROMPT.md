@@ -136,3 +136,6 @@ api 명세서 제공해줄테니까 문서 써줘 📖 API 명세
 ```
 Implement the following plan: # 4-1. OrderService.createOrder() 트랜잭션 적용 계획
 ```
+```
+4-2 ㄱㄱㄱ
+```
