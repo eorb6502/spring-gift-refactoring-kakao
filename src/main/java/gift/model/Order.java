@@ -49,6 +49,14 @@ public class Order {
         return option.getId();
     }
 
+    public String optionName() {
+        return option.getName();
+    }
+
+    public boolean hasMessage() {
+        return message != null && !message.isBlank();
+    }
+
     public Long getMemberId() {
         return memberId;
     }
