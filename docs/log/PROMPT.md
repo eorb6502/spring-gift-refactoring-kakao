@@ -139,3 +139,12 @@ Implement the following plan: # 4-1. OrderService.createOrder() 트랜잭션 적
 ```
 4-2 ㄱㄱㄱ
 ```
+```
+Implement the following plan:
+
+# 5-1. 상품 옵션 수정 API 구현 계획
+
+## Context
+
+API 명세에 `PUT /api/products/{productId}/options/{optionId}` (상품 옵션 수정)이 정의되어 있지만, OptionController에 PUT 엔드포인트가 없고 OptionService에 update() 메서드도 없다. 누락된 작동을 구현한다.
+```
