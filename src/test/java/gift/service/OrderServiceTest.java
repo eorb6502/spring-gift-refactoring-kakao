@@ -19,7 +19,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.doThrow;
@@ -34,8 +33,6 @@ class OrderServiceTest {
     private OptionService optionService;
     @Mock
     private MemberService memberService;
-    @Mock
-    private KakaoNotificationService kakaoNotificationService;
 
     @InjectMocks
     private OrderService orderService;
@@ -68,7 +65,6 @@ class OrderServiceTest {
             then(optionService).should().subtractQuantity(1L, 2);
             then(memberService).should().deductPoint(member, 2000);
             then(orderRepository).should().save(any(Order.class));
-            then(kakaoNotificationService).should().sendOrderNotification(eq(member), any(Order.class), eq(option));
         }
 
         @Test
@@ -83,7 +79,6 @@ class OrderServiceTest {
                 .hasMessage("Insufficient points.");
 
             then(orderRepository).should(never()).save(any(Order.class));
-            then(kakaoNotificationService).should(never()).sendOrderNotification(any(), any(), any());
         }
 
         @Test
@@ -98,7 +93,6 @@ class OrderServiceTest {
 
             then(memberService).should(never()).deductPoint(any(), anyInt());
             then(orderRepository).should(never()).save(any(Order.class));
-            then(kakaoNotificationService).should(never()).sendOrderNotification(any(), any(), any());
         }
     }
 }
