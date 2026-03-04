@@ -44,6 +44,7 @@ class OptionTest {
 
         assertThatThrownBy(() -> option.subtractQuantity(6))
             .isInstanceOf(IllegalArgumentException.class);
+        assertThat(option.getQuantity()).isEqualTo(5);
     }
 
     @Test
@@ -53,5 +54,6 @@ class OptionTest {
 
         assertThatThrownBy(() -> option.subtractQuantity(1))
             .isInstanceOf(IllegalArgumentException.class);
+        assertThat(option.getQuantity()).isEqualTo(0);
     }
 }
