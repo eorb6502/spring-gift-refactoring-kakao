@@ -7,6 +7,7 @@ import gift.repository.OrderRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OrderService {
@@ -31,6 +32,7 @@ public class OrderService {
         return orderRepository.findByMemberId(memberId, pageable);
     }
 
+    @Transactional
     public Order createOrder(Member member, Long optionId, int quantity, String message) {
         // subtract stock
         Option option = optionService.subtractQuantity(optionId, quantity);
