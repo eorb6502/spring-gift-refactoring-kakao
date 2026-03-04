@@ -162,3 +162,8 @@ Implement the following plan:
 
 # 6-1. 디미터 법칙 위반 해소 — DTO 변환에서 엔티티 체인 접근 제거
 ```
+```
+Implement the following plan:
+
+# 6-2. 디미터 법칙 위반 해소 — 서비스/클라이언트 레이어 체인 접근 제거
+```
