@@ -55,6 +55,23 @@ public class OptionService {
         optionRepository.delete(option);
     }
 
+    public Option update(Long productId, Long optionId, String name, int quantity) {
+        validateName(name);
+        productService.findById(productId);
+
+        Option option = optionRepository.findById(optionId)
+            .orElseThrow(() -> new NoSuchElementException("Option not found. id=" + optionId));
+        if (!option.getProduct().getId().equals(productId)) {
+            throw new NoSuchElementException("Option not found. id=" + optionId);
+        }
+        if (optionRepository.existsByProductIdAndNameAndIdNot(productId, name, optionId)) {
+            throw new IllegalArgumentException("Option name already exists.");
+        }
+
+        option.update(name, quantity);
+        return optionRepository.save(option);
+    }
+
     public Option subtractQuantity(Long optionId, int quantity) {
         Option option = findById(optionId);
         option.subtractQuantity(quantity);

@@ -35,6 +35,11 @@ public class Option {
         this.quantity = quantity;
     }
 
+    public void update(String name, int quantity) {
+        this.name = name;
+        this.quantity = quantity;
+    }
+
     public void subtractQuantity(int amount) {
         if (amount > this.quantity) {
             throw new IllegalArgumentException("Subtract amount exceeds current stock.");
