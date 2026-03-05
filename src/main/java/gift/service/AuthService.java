@@ -11,23 +11,20 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AuthService {
     private final MemberRepository memberRepository;
+    private final MemberService memberService;
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
 
-    public AuthService(MemberRepository memberRepository, JwtProvider jwtProvider, PasswordEncoder passwordEncoder) {
+    public AuthService(MemberRepository memberRepository, MemberService memberService, JwtProvider jwtProvider, PasswordEncoder passwordEncoder) {
         this.memberRepository = memberRepository;
+        this.memberService = memberService;
         this.jwtProvider = jwtProvider;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
     public TokenResponse register(String email, String password) {
-        if (memberRepository.existsByEmail(email)) {
-            throw new IllegalArgumentException("Email is already registered.");
-        }
-
-        String encodedPassword = passwordEncoder.encode(password);
-        final Member member = memberRepository.save(new Member(email, encodedPassword));
+        final Member member = memberService.create(email, password);
         final String token = jwtProvider.createToken(member.getEmail());
         return new TokenResponse(token);
     }
