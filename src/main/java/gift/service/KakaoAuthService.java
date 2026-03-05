@@ -45,18 +45,20 @@ public class KakaoAuthService {
             .toUriString();
     }
 
-    @Transactional
     public TokenResponse processCallback(String code) {
         KakaoLoginClient.KakaoTokenResponse kakaoToken = kakaoLoginClient.requestAccessToken(code);
         KakaoLoginClient.KakaoUserResponse kakaoUser = kakaoLoginClient.requestUserInfo(kakaoToken.accessToken());
-        String email = kakaoUser.email();
 
+        return saveAndIssueToken(kakaoUser.email(), kakaoToken.accessToken());
+    }
+
+    @Transactional
+    public TokenResponse saveAndIssueToken(String email, String accessToken) {
         Member member = memberRepository.findByEmail(email)
             .orElseGet(() -> new Member(email));
-        member.updateKakaoAccessToken(kakaoToken.accessToken());
+        member.updateKakaoAccessToken(accessToken);
         memberRepository.save(member);
 
-        String token = jwtProvider.createToken(member.getEmail());
-        return new TokenResponse(token);
+        return new TokenResponse(jwtProvider.createToken(email));
     }
 }
